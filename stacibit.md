@@ -1,3 +1,18 @@
+The purpose of the sticky bit permission in Linux is to restrict file deletion at the directory level. When the sticky bit is set on a directory, only the owner of a file within that directory (or the root user) can delete the file. This permission does not affect individual files but applies to the directory itself, ensuring that users can only delete files that they own within that specific directory.
+
+A common example of the sticky bit in action is the `/tmp` directory, where it is often set to prevent unauthorized users from deleting files created by others. This permission setting helps maintain data integrity and security by preventing accidental or malicious deletion of files by users who do not own them.
+
+In summary, the sticky bit permission in Linux serves as a safeguard to control file deletion within directories, ensuring that only the file owner or the root user has the authority to remove files, enhancing data protection and access control.
+
+Citations:
+[1] https://phoenixnap.com/kb/linux-file-permissions
+[2] https://www.redhat.com/sysadmin/suid-sgid-sticky-bit
+[3] https://www.redhat.com/sysadmin/linux-file-permissions-explained
+[4] https://www.linuxfoundation.org/blog/blog/classic-sysadmin-understanding-linux-file-permissions
+[5] https://contabo.com/blog/linux-permission-basics/
+
+>
+
 The main benefit of using the sticky bit permission in Linux is to restrict file deletion within a directory, even if other users have write permissions on that directory[1][3].
 
 When the sticky bit is set on a directory, only the owner of a file or the root user can delete or rename files inside that directory[1][3]. This is particularly useful for directories like `/tmp` where multiple users may need to create and access files, but should not be able to delete each other's files[3].
