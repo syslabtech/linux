@@ -2,8 +2,8 @@
 
 # Function to log messages using logger (which sends output to the system log)
 log_message() {
-    # logger -t smartctl_script "$1"
-    logger --size 2MiB -t smartctl_script "$1"
+    logger -t smartctl_tool "$1"
+    # logger --size 2MiB -t smartctl_script "$1"
 
 }
 
