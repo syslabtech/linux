@@ -1,5 +1,12 @@
 #!/bin/sh
 
+# Function to log messages using logger (which sends output to the system log)
+log_message() {
+    # logger -t smartctl_script "$1"
+    logger --size 2MiB -t smartctl_script "$1"
+
+}
+
 # Function to check if sudo is installed
 check_sudo() {
     if command -v sudo >/dev/null 2>&1; then
@@ -21,7 +28,9 @@ run_smartctl_a() {
     DEVICE=$1
     FILENAME=$(basename "$DEVICE")_output.txt
     echo "Saving smartctl output of $DEVICE to $FILENAME"
-    $SUDO smartctl -a "$DEVICE" > "$FILENAME"
+    OUTPUT=$($SUDO smartctl -a "$DEVICE")
+    echo "Drive Scanning Output: $OUTPUT" > "$FILENAME"
+    log_message "$OUTPUT"
 }
 
 
@@ -76,7 +85,7 @@ if [ -f /etc/os-release ]; then
     done
 
     echo "Sleeping for 5 minutes..."
-    sleep 300
+    sleep 0
 
     # Iterate through each line of the smartctl scan output
 echo "$SCAN_OUTPUT" | while read -r LINE; do
@@ -93,4 +102,3 @@ echo "$SCAN_OUTPUT" | while read -r LINE; do
 else
     echo "The /etc/os-release file does not exist. Unable to detect OS."
 fi
-
