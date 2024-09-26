@@ -1,6 +1,8 @@
+# Hashicorp Consul
+
 Consul UI : http://<your-server-ip>:8500/
 
-# consul.hcl
+> consul.hcl
 ```
 datacenter = "consul-0"
 data_dir = "/opt/consul"
@@ -16,4 +18,29 @@ connect {
   enabled = true
 }
 #bootstrap_expect = 1
+```
+
+> Consul Service File Location ((/lib/systemd/system/consul.service)
+```
+[Unit]
+Description="HashiCorp Consul - A service mesh solution"
+Documentation=https://www.consul.io/
+Requires=network-online.target
+After=network-online.target
+ConditionFileNotEmpty=/etc/consul.d/consul.hcl
+
+[Service]
+Type=notify
+EnvironmentFile=-/etc/consul.d/consul.env
+User=consul
+Group=consul
+ExecStart=/usr/bin/consul agent -config-dir=/etc/consul.d/
+ExecReload=/bin/kill --signal HUP $MAINPID
+KillMode=process
+KillSignal=SIGTERM
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
 ```
