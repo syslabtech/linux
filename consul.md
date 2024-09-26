@@ -1,5 +1,5 @@
 # Hashicorp Consul
-    > 1.19.2
+    1.19.2
     
 Consul UI : http://127.0.0.1:8500/
 
