@@ -1,6 +1,6 @@
 # Hashicorp Consul
 
-Consul UI : http://<your-server-ip>:8500/
+Consul UI : http://127.0.0.1:8500/
 
 > consul.hcl
 ```
