@@ -2,7 +2,8 @@
 
 # Function to log messages using logger (which sends output to the system log)
 log_message() {
-    logger --size 1MiB -t smartctl_script "$1"
+    # logger --size 1MiB -t smartctl_script "$1"
+    logger -t smartctl_script "$1"
 }
 
 # Function to check if sudo is installed
@@ -27,11 +28,13 @@ run_smartctl_a() {
     OUTPUT=$($SUDO smartctl -a "$DEVICE")
 
     # Remove newlines, carriage returns, and spaces to create a single string
-    MODIFIED_OUTPUT=$(echo "$OUTPUT" | tr -d '\n\r ')
+    # MODIFIED_OUTPUT=$(echo "$OUTPUT" | tr -d '\n\r '
+    MODIFIED_OUTPUT=$(echo "$OUTPUT" | tr '\n' '|' | tr '\r' '|' | sed 's/||/||/g')
 
     # Append the output to the single output file
+    echo "Drive Scanning Output for $DEVICE: $OUTPUT" >> smartctl_drivescan_normal_output.log
     echo "Drive Scanning Output for $DEVICE: $MODIFIED_OUTPUT" >> smartctl_drivescan_output.log
-    log_message "$MODIFIED_OUTPUT"
+    log_message "$OUTPUT"
 }
 
 # Clear the file at the beginning of the script
@@ -84,7 +87,7 @@ if [ -f /etc/os-release ]; then
     done
 
     echo "Sleeping for 5 minutes..."
-    sleep 0  # Adjust the sleep time as needed for the tests to complete
+    sleep 300  # Adjust the sleep time as needed for the tests to complete
 
     # Iterate through each line of the smartctl scan output
     echo "$SCAN_OUTPUT" | while read -r LINE; do
