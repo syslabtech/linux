@@ -32,8 +32,8 @@ run_smartctl_a() {
     MODIFIED_OUTPUT=$(echo "$OUTPUT" | tr '\n' '|' | tr '\r' '|' | sed 's/||/||/g')
 
     # Append the output to the single output file
-    echo "Drive Scanning Output for $DEVICE: $OUTPUT" >> smartctl_drivescan_normal_output.log
-    echo "Drive Scanning Output for $DEVICE: $MODIFIED_OUTPUT" >> smartctl_drivescan_output.log
+    echo "Drive Scanning $current_date On $(hostname), Output for $DEVICE: $OUTPUT" >> smartctl_drivescan_normal_output.log
+    echo "Drive Scanning $current_date On $(hostname), Output for $DEVICE: $MODIFIED_OUTPUT" >> smartctl_drivescan_output.log
     log_message "$OUTPUT"
 }
 
