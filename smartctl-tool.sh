@@ -25,6 +25,7 @@ run_smartctl_test() {
 # Function to run smartctl -a and save the output to a single file
 run_smartctl_a() {
     DEVICE=$1
+    MOUNT_PATH=$2
     OUTPUT=$($SUDO smartctl -a "$DEVICE")
 
     # Remove newlines, carriage returns, and spaces to create a single string
@@ -32,8 +33,8 @@ run_smartctl_a() {
     MODIFIED_OUTPUT=$(echo "$OUTPUT" | tr '\n' '|' | tr '\r' '|' | sed 's/||/||/g')
 
     # Append the output to the single output file
-    echo "Drive Scanning $current_date On $(hostname), Output for $DEVICE: $OUTPUT" >> smartctl_drivescan_normal_output.log
-    echo "Drive Scanning $current_date On $(hostname), Output for $DEVICE: $MODIFIED_OUTPUT" >> smartctl_drivescan_output.log
+    echo "Drive Scanning $current_date On $(hostname), Output for $DEVICE on Mount: $MOUNT_PATH: $OUTPUT" >> smartctl_drivescan_normal_output.log
+    echo "Drive Scanning $current_date On $(hostname), Output for $DEVICE on Mount: $MOUNT_PATH: $MODIFIED_OUTPUT" >> smartctl_drivescan_output.log
     log_message "$OUTPUT"
 }
 
@@ -94,9 +95,9 @@ if [ -f /etc/os-release ]; then
         # Extract the device path (e.g., /dev/sda or /dev/nvme0)
         DEVICE=$(echo "$LINE" | awk '{print $1}')
         DEVICE_TYPE=$(echo "$LINE" | awk '{print $3}')
-
+        MOUNT_POINT=$(df -h | grep "$DEVICE" | awk '{print $6}')
         # Run smartctl -a and append the output to the combined output file
-        run_smartctl_a "$DEVICE"
+        run_smartctl_a "$DEVICE" "$MOUNT_POINT"
     done
 
 else
